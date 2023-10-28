@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import connectDb from "./database/dbConnect.js";
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
@@ -7,6 +8,11 @@ const app = express();
 connectDb();
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
 
