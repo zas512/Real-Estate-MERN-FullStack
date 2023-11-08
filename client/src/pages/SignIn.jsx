@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 import axios from "axios";
 import Lottie from "react-lottie";
 import loading_anim from "../animations/loading_anim.json";
@@ -27,7 +29,7 @@ const SignIn = () => {
     try {
       const response = await axios.post(`${VITE_URL}/auth/signin`, formData);
       setLoading(false);
-      if (response.data) {
+      if (response.data.success) {
         setSuccess(true);
         setTimeout(() => {
           navigate("/");
@@ -75,41 +77,19 @@ const SignIn = () => {
   return (
     <section className="max-w-lg p-3 mx-auto">
       <h1 className="my-4 text-3xl font-semibold text-center">SIGN UP</h1>
-      <form
-        ref={formRef}
-        className="flex flex-col gap-4 mb-4"
-        onSubmit={handleSubmit}
-      >
+      <form ref={formRef} className="flex flex-col gap-4 mb-4" onSubmit={handleSubmit}>
         <label htmlFor="username"></label>
-        <input
-          type="text"
-          placeholder="Username"
-          className="p-3 border rounded-lg"
-          id="username"
-          required
-          onChange={handleChange}
-        />
+        <input type="text" placeholder="Username" className="p-3 border rounded-lg" id="username" required onChange={handleChange} />
         <label htmlFor="password"></label>
-        <input
-          type="password"
-          placeholder="Password"
-          className="p-3 border rounded-lg"
-          id="password"
-          required
-          onChange={handleChange}
-        />
+        <input type="password" placeholder="Password" className="p-3 border rounded-lg" id="password" required onChange={handleChange} />
         <button
           className="h-[54px] p-3 mt-4 flex items-center justify-center text-white rounded-lg bg-slate-700 hover:opacity-90 disabled:opacity-70"
           type="submit"
           disabled={loading || error || success}
         >
-          {loading && (
-            <Lottie options={loadingOptions} height={50} width={50} />
-          )}
+          {loading && <Lottie options={loadingOptions} height={50} width={50} />}
           {error && <Lottie options={errorOptions} height={50} width={50} />}
-          {success && (
-            <Lottie options={successOptions} height={50} width={50} />
-          )}
+          {success && <Lottie options={successOptions} height={50} width={50} />}
           {!loading && !error && !success && "Sign In"}
         </button>
       </form>
